@@ -29,7 +29,7 @@ df = pd.read_excel(file_path)
 
 
 # get nlp ready to go. ------------------
-nlp = spacy.load("en_core_web_md")
+nlp = spacy.load("en_core_web_lg")
 # ---------------------------------------
 
 
@@ -58,6 +58,8 @@ def check_keys(res, out, id_index):
     global cols
     new_key = ''
 
+    fb = strip(fb)
+
     for fb in out:
         # save trouble if empty string
         if fb == '':
@@ -75,7 +77,7 @@ def check_keys(res, out, id_index):
             # second phrase
             phrase_two = nlp(key)
             # check similarity
-            if phrase_one.similarity(phrase_two) >= .75:
+            if phrase_one.similarity(phrase_two) >= .99:
                 new_key = key
                 is_present = True
 
@@ -135,8 +137,19 @@ def classify_data():
                 print(Fore.GREEN + "Question: \n-------------------------------\n", Fore.WHITE, i, "\n")
                 print(Fore.RED + "Data: \n-------------------------------\n", Fore.WHITE, item, "\n")
 
+                # getting user input
+                print(Fore.CYAN + "Categorize Feedback (separate each entry with a comma):\n-----------------------------------------------------------\n")
+                print("Recent Responses (reusing these will make life easier):\n")
+
+                # get keys and print them in a makeshift list
+                ls = res.keys()
+                for key in ls:
+                    print("- " + key + "\n")
+
+                # print a divider to make people happy
+                print("-----------------------------------------------------------\n")
                 # takes input as comma separated feedback.
-                tmp = input(Fore.CYAN + "Categorize Feedback (separate each entry with a comma):\n-----------------------------------------------------------" + Fore.WHITE + "\n")
+                tmp = input(Fore.WHITE)
 
             # make a new list and add the current ID to 0 zero index. splits cs feedback into a list based on the commas
             out = tmp.split(",")
